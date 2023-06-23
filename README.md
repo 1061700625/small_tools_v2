@@ -30,3 +30,22 @@ pyinstaller -F -w .\main.py
 
 ## 其他说明
 这里的**desktop_clock.exe**来自这个仓库[Tkinter_Desktop_Clock](https://github.com/1061700625/Tkinter_Desktop_Clock)。
+
+## 插件功能清单
+- **字符串格式化**：其实就是去除空格，特别是caj论文在复制时候，文字之间会有很多空格
+
+![image](https://github.com/1061700625/small_tools_v2/assets/31002981/d49dd2e7-86ff-4593-ab1a-adf8f76a73e4)
+
+- **PPT修改DPI**：修改导出图片的DPI
+
+![image](https://github.com/1061700625/small_tools_v2/assets/31002981/943128e9-f45e-44f3-aeb8-c0d9f299a558)
+
+- **桌面时钟**
+
+![image](https://github.com/1061700625/small_tools_v2/assets/31002981/ca2872a8-c2e6-490c-9d39-8b75ee58e5ad)
+
+
+
+
+
+
