@@ -44,8 +44,9 @@ pyinstaller -F -w .\main.py
 
 ![image](https://github.com/1061700625/small_tools_v2/assets/31002981/ca2872a8-c2e6-490c-9d39-8b75ee58e5ad)
 
+- **[论文排名](https://blog.csdn.net/sxf1061700625/article/details/132081355)**    
 
-
+![image](https://github.com/1061700625/small_tools_v2/assets/31002981/1825b756-c573-4fe4-92ea-e070c09b1eb3)
 
 
 
