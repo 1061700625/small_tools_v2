@@ -20,14 +20,27 @@ class Viewer:
 
     def display_npy_content(self):
         file_path = self.path_input.get()
-        file_extension = file_path.split('.')[-1].lower()
         try:
-            np_array = "Unsupported file format."
-            if file_extension == 'npy':
+            # file_extension = file_path.split('.')[-1].lower()
+            # np_array = "Unsupported file format."
+            # if file_extension == 'npy':
+            #     np_array = np.load(file_path)
+            # elif file_extension == 'npz':
+            #     np_array = scipy.sparse.load_npz(file_path)
+            # 有些npz可能实际是npy,因此不建议按文件名判断
+            try:
                 np_array = np.load(file_path)
-            elif file_extension == 'npz':
+            except:
                 np_array = scipy.sparse.load_npz(file_path)
+            
             self.output_text.delete("1.0", tk.END)  # Clear previous output
+
+            if type(np_array) == np.ndarray:
+                self.output_text.insert(tk.END, '>> 这是npy文件\n')
+            elif type(np_array) == np.lib.npyio.NpzFile:
+                self.output_text.insert(tk.END, '>> 这是npz文件, 包含以下key: '+str(np_array.files)+'\n')
+                np_array = str(list(np_array.items()))
+
             self.output_text.insert(tk.END, np_array)
         except Exception as e:
             self.output_text.delete("1.0", tk.END)
@@ -59,13 +72,25 @@ class Viewer:
         root.mainloop()
 
 def display_npy_content_cmd(file_path):
-    file_extension = file_path.split('.')[-1].lower()
     try:
-        np_array = "Unsupported file format."
-        if file_extension == 'npy':
+        # file_extension = file_path.split('.')[-1].lower()
+        # np_array = "Unsupported file format."
+        # if file_extension == 'npy':
+        #   np_array = np.load(file_path)
+        # elif file_extension == 'npz':
+        #   np_array = scipy.sparse.load_npz(file_path)
+        # 有些npz可能实际是npy,因此不建议按文件名判断
+        try:
             np_array = np.load(file_path)
-        elif file_extension == 'npz':
+        except:
             np_array = scipy.sparse.load_npz(file_path)
+
+        if type(np_array) == np.ndarray:
+            print('>> 这是npy文件')
+        elif type(np_array) == np.lib.npyio.NpzFile:
+            print('>> 这是npz文件, 包含以下key: '+str(np_array.files))
+            np_array = str(list(np_array.items()))
+
         print(np_array)
     except Exception as e:
         print(e)
