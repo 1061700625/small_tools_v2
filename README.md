@@ -21,11 +21,15 @@
 
 
 自行添加py功能函数（或打包为exe），统一放在plugin文件夹下，然后在**config.txt**里记录一下。
-注意自己加的py里面必须要有**process()**函数，供main.py调用。
+注意自己加的py里面必须要有 **process()** 函数，供main.py调用。
 
 ## 运行示例
 **运行：**
-双击**main.exe**或者**启动.bat**即可
+- 对于Windows：双击**main.exe**或者**启动.bat**即可    
+- 对于MacOS：双击**启动_mac.command**即可
+
+(不过由于运行py文件，因此可能需要安装缺少的库)
+
 
 **打包：**
 ```bash
