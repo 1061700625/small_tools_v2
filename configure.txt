@@ -1,6 +1,6 @@
 字符格式化, format_string.py
-PPT改DPI, ppt_dpi.py
+PPT改DPI, ppt_dpi.exe
 桌面时钟, desktop_clock.exe
-会议排名, conference_rank.py
-np文件查看器, npViewer.py
+会议排名, conference_rank.exe
+
 
