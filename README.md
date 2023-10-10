@@ -73,5 +73,8 @@ pyinstaller -F -w .\main.py
   <img width="462" alt="image" style="margin: 0 auto;" src="https://github.com/1061700625/small_tools_v2/assets/31002981/7b5485c3-11ea-402c-8cc9-b33cec528706">
 </div>
 
-
+- **[SSH端口转发管理器](https://blog.csdn.net/sxf1061700625/article/details/133746872)**    
+<div align=center> 
+  <img width="462" alt="image" style="margin: 0 auto;" src="https://github.com/1061700625/small_tools_v2/assets/31002981/272662be-a67c-4399-a50c-303ddc6b70c9">
+</div>
 
