@@ -105,11 +105,15 @@ class Win(WinGUI):
         def fullwidth_to_halfwidth(s):
             """Convert full-width characters to half-width."""
             return ''.join([chr(ord(c) - 0xFEE0) if 0xFF01 <= ord(c) <= 0xFF5E else c for c in s])
+        def is_chinese_or_punctuation(char):
+            """Check if the character is Chinese or a punctuation mark."""
+            category = unicodedata.category(char)
+            return 'Lo' in category or 'P' in category
         input_text2 = self.widget_dic["tk_input_text2"]
         text = input_text2.get("1.0", "end-1c")  # 获取输入框2中的内容
         text = fullwidth_to_halfwidth(text)
-        # Replace non-ASCII characters (excluding Chinese characters) with a space
-        text = re.sub(r'[^\x00-\x7F\u4e00-\u9fa5]+', ' ', text)
+        # Keep ASCII, Chinese characters and Chinese punctuation
+        text = ''.join([char if ord(char) < 128 or is_chinese_or_punctuation(char) else ' ' for char in text])
         # Replace multiple spaces with a single space
         text = re.sub(r'\s+', ' ', text).strip()
         input_text2.delete("1.0", "end")  # 清空输入框2
