@@ -3,6 +3,32 @@ from tkinter import filedialog
 from PIL import Image, ImageTk
 import os
 
+import cv2
+import numpy as np
+def img_crop_process(img):
+    try:
+        img_cv = np.array(img.convert('L'))
+        img_blur = cv2.GaussianBlur(img_cv, (9, 9), 2)
+        circles = cv2.HoughCircles(img_blur, cv2.HOUGH_GRADIENT, dp=1, minDist=20,
+                                param1=100, param2=40, minRadius=0, maxRadius=0)
+        if circles is not None:
+            circles = np.uint16(np.around(circles))
+            max_circle = max(circles[0, :], key=lambda x: x[2])  # Select the largest circle by radius
+        x, y, r = max_circle
+        left = max(x - r, 0)
+        right = min(x + r, img_cv.shape[1])
+        top = max(y - r, 0)
+        bottom = min(y + r, img_cv.shape[0])
+        # Load the original image in color
+        cropped_color_img = img.crop((left, top, right, bottom))
+        mask = np.zeros_like(cropped_color_img)
+        cv2.circle(mask, (r, r), r, (255, 255, 255), -1)
+        cropped_color_img_with_white_bg = np.where(mask == (255, 255, 255), cropped_color_img, (255, 255, 255))
+        final_img = Image.fromarray(np.uint8(cropped_color_img_with_white_bg))
+        return final_img
+    except Exception:
+        return img
+
 class ImageRotatorApp(tk.Tk):
     def __init__(self):
         super().__init__()
@@ -28,29 +54,25 @@ class ImageRotatorApp(tk.Tk):
         # Frame for source directory selection and display
         self.source_frame = tk.Frame(self)
         self.source_frame.pack(fill='x')
-        
         self.select_source_button = tk.Button(self.source_frame, text="选择图像目录", command=self.select_source_directory)
         self.select_source_button.pack(side='left', padx=10, pady=5)
-        
         self.source_directory_label = tk.Label(self.source_frame, text=self.source_directory)
         self.source_directory_label.pack(side='left')
 
         # Frame for result directory selection and display
         self.result_frame = tk.Frame(self)
         self.result_frame.pack(fill='x')
-
         self.select_result_button = tk.Button(self.result_frame, text="选择保存目录", command=self.select_result_directory)
         self.select_result_button.pack(side='left', padx=10, pady=5)
-        
         self.result_directory_label = tk.Label(self.result_frame, text=self.result_directory)
         self.result_directory_label.pack(side='left')
 
         # Image display frame
         self.img_display = tk.Label(self, width=400, height=400)
         self.img_display.pack(expand=True, fill='both')
-
+        
         # Slider for rotation
-        self.rotation_slider = tk.Scale(self, from_=0, to=360, length=300, orient="horizontal", command=self.rotate_image)
+        self.rotation_slider = tk.Scale(self, from_=0, to=360, length=400, orient="horizontal", command=self.rotate_image)
         self.rotation_slider.pack(fill='x')
 
         self.button_frame = tk.Frame(self)
@@ -58,8 +80,11 @@ class ImageRotatorApp(tk.Tk):
         self.prev_button = tk.Button(self.button_frame, text="上一张", command=self.load_prev_image)
         self.prev_button.config(height=2, width=10)  
         self.prev_button.pack(expand=True, fill='x', side='left', padx=10, pady=5)
+        self.crop_button = tk.Button(self.button_frame, text="自动裁剪", command=self.crop_image)
+        self.crop_button.config(height=2, width=10)  # Make the button larger
+        self.crop_button.pack(expand=True, fill='x', side='left', padx=10, pady=5)
         # Button to save the image
-        self.save_button = tk.Button(self.button_frame, text="保存", command=self.save_image)
+        self.save_button = tk.Button(self.button_frame, text="保存图片", command=self.save_image)
         self.save_button.config(height=2, width=10)  # Make the button larger
         self.save_button.pack(expand=True, fill='x', side='left', padx=10, pady=5)
         # Next image button 
@@ -90,7 +115,7 @@ class ImageRotatorApp(tk.Tk):
         if directory:  # Update the directory only if a choice was made
             self.result_directory = directory
             self.result_directory_label.config(text=self.result_directory)
-
+        
     def load_next_image(self):
         if self.original_image:
             img_files = [f for f in os.listdir(self.source_directory) if f.endswith(('.png', '.jpg', '.jpeg'))]
@@ -101,6 +126,7 @@ class ImageRotatorApp(tk.Tk):
             self.show_debug_msg(f"当前图片[{next_idx+1}/{len(img_files)}]: {os.path.join(self.source_directory, next_img_name)}")
             self.image = self.original_image
             self.img_name = next_img_name
+            self.rotation_slider.set(0)
             self.update_image_display()
     
     def load_prev_image(self):
@@ -113,6 +139,7 @@ class ImageRotatorApp(tk.Tk):
             self.show_debug_msg(f"当前图片[{prev_idx+1}/{len(img_files)}]: {os.path.join(self.source_directory, prev_img_name)}")
             self.image = self.original_image
             self.img_name = prev_img_name
+            self.rotation_slider.set(0)
             self.update_image_display()
         
     def load_first_image_from_source(self):
@@ -137,19 +164,25 @@ class ImageRotatorApp(tk.Tk):
         if self.original_image:
             angle = int(value)
             self.rotate_value = angle
-            self.image = self.original_image.rotate(-angle, resample=Image.Resampling.BILINEAR, fillcolor=(255, 255, 255))  # Negative for correct rotation direction
+            self.image = self.original_image.rotate(-angle, resample=Image.Resampling.BILINEAR, fillcolor=(255, 255, 255))
             self.update_image_display()
 
-    def update_image_display(self):
-        if self.image:
+    def crop_image(self):
+        if self.original_image:
+            self.original_image = img_crop_process(self.original_image)
+            self.rotation_slider.set(0)
+            self.update_image_display(self.original_image)
+
+    def update_image_display(self, src_img=None):
+        src_img = src_img or self.image
+        if src_img:
             # 缩放图片
-            image_w, image_h = self.image.size
+            image_w, image_h = src_img.size
             if image_w > 400 or image_h > 400: 
-                self.image.thumbnail((400,400))
-            self.tk_image = ImageTk.PhotoImage(self.image)
+                src_img.thumbnail((400,400))
+            self.tk_image = ImageTk.PhotoImage(src_img)
             self.img_display.config(image=self.tk_image)
         else:
-            # Clear the image in the Tkinter label
             self.img_display.config(image='')
 
     def save_image(self):
