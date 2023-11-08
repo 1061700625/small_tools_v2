@@ -4,4 +4,4 @@ PPT改DPI, ppt_dpi.exe
 会议排名, conference_rank.exe
 np文件查看器, npViewer.py
 SSH端口转发, ssh_forward.exe
-
+图像旋转器, image_rotator.exe
