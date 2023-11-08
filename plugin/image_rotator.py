@@ -2,9 +2,11 @@ import tkinter as tk
 from tkinter import filedialog
 from PIL import Image, ImageTk
 import os
-
+import pyperclip
 import cv2
 import numpy as np
+
+
 def img_crop_process(img):
     try:
         img_cv = np.array(img.convert('L'))
@@ -94,15 +96,20 @@ class ImageRotatorApp(tk.Tk):
 
         # 信息显示标签  
         self.info_label = tk.Label(self, text='')
-        self.info_label.config(height=1)
+        self.info_label.config(height=1, width=400, anchor='w', wraplength=0)
         self.info_label.pack(side='bottom', fill='x')
+        self.info_label.bind('<Double-Button-1>', self.copy_info_label)
         
         # Update the display with the first image from the source directory
         self.load_first_image_from_source()
 
     def show_debug_msg(self, msg):
         self.info_label.config(text=msg)
-                               
+    
+    def copy_info_label(self, event):
+        pyperclip.copy(self.info_label['text'])
+        self.show_debug_msg(">> 双击成功，该内容已复制到剪切板 <<")
+    
     def select_source_directory(self):
         directory = filedialog.askdirectory()
         if directory:  # Update the directory only if a choice was made
