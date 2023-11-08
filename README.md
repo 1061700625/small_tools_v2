@@ -78,7 +78,7 @@ pyinstaller -F -w .\main.py
   <img width="462" alt="image" style="margin: 0 auto;" src="https://github.com/1061700625/small_tools_v2/assets/31002981/272662be-a67c-4399-a50c-303ddc6b70c9">
 </div>
 
-- **图像旋转器(数据集制作辅助)**
+- **[图像旋转器(数据集制作辅助)](https://blog.csdn.net/sxf1061700625/article/details/134300561)**
 <div align=center> 
   <img width="462" alt="image" style="margin: 0 auto;" src="https://github.com/1061700625/small_tools_v2/assets/31002981/fb31b279-b0da-4166-b2e4-537184635001">
 </div>
