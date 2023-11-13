@@ -5,3 +5,5 @@ PPT改DPI, ppt_dpi.exe
 np文件查看器, npViewer.py
 SSH端口转发, ssh_forward.exe
 图像旋转器, image_rotator.exe
+系统代理连接, simple_proxy.exe
+MathML转Latex, mathml2latex.exe
