@@ -10,7 +10,7 @@
 所以以下就是初次尝试！目前添加了以下功能，支持**py**和**exe**形式的插件。
 
 <div align=center> 
-  <img width="551" alt="image" src="https://github.com/1061700625/small_tools_v2/assets/31002981/7fbaf0dc-b1f3-4c91-ac8b-91be1ef43d24">
+  <img width="551" alt="image" src="https://github.com/1061700625/small_tools_v2/assets/31002981/9e44e336-25bf-4525-82d7-9479d45372ee">
 </div>
 
 ## 目录结构说明
@@ -82,4 +82,15 @@ pyinstaller -F -w .\main.py
 <div align=center> 
   <img width="462" alt="image" style="margin: 0 auto;" src="https://github.com/1061700625/small_tools_v2/assets/31002981/fb31b279-b0da-4166-b2e4-537184635001">
 </div>
+
+- **word mathml公式格式转latex**
+<div align=center> 
+  <img width="462" alt="image" style="margin: 0 auto;" src="https://github.com/1061700625/small_tools_v2/assets/31002981/3a8019fc-926f-487e-8f46-f63911c20a0c">
+</div>
+
+- **系统代理设置**
+<div align=center> 
+  <img width="462" alt="image" style="margin: 0 auto;" src="https://github.com/1061700625/small_tools_v2/assets/31002981/04f4d0dd-d3a7-44ce-b307-94e5e0951063">
+</div>
+
 
