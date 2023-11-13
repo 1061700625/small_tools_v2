@@ -1,0 +1,10 @@
+pyinstaller
+numpy
+pyperclip
+pillow
+opencv-python
+tqdm
+requests
+datetime
+tkcalendar
+scipy
