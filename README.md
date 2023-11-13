@@ -30,8 +30,13 @@
 
 (不过由于运行py文件，因此可能需要安装缺少的库)
 
+**安装环境：**
+```bash
+conda create -n py39 python=3.9
+pip -r requirements.txt
+```
 
-**打包：**
+**打包软件：**
 ```bash
 conda activate py37
 pyinstaller -F -w .\main.py
