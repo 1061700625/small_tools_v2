@@ -98,4 +98,9 @@ pyinstaller -F -w .\main.py
   <img width="462" alt="image" style="margin: 0 auto;" src="https://github.com/1061700625/small_tools_v2/assets/31002981/04f4d0dd-d3a7-44ce-b307-94e5e0951063">
 </div>
 
+- **桌面尺子**
+<div align=center> 
+  <img width="462" alt="image" style="margin: 0 auto;" src="https://github.com/1061700625/small_tools_v2/assets/31002981/5c9e1e88-f2a2-4cee-a9ec-ccc247f5fd93">
+</div>
+
 
