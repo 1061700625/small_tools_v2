@@ -7,5 +7,4 @@ SSH端口转发, ssh_forward.exe
 图像旋转器, image_rotator.exe
 系统代理连接, simple_proxy.exe
 MathML转Latex, mathml2latex.exe
-桌面尺子, desktop_ruler.exe
-咪哒录音下载, mida.exe
+图片压缩器, compressor.exe
