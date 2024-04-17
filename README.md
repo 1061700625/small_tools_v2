@@ -103,4 +103,12 @@ pyinstaller -F -w .\main.py
   <img width="462" alt="image" style="margin: 0 auto;" src="https://github.com/1061700625/small_tools_v2/assets/31002981/5c9e1e88-f2a2-4cee-a9ec-ccc247f5fd93">
 </div>
 
+- **图像压缩**
+<div align=center> 
+  <img width="462" alt="image" style="margin: 0 auto;" src="https://github.com/1061700625/small_tools_v2/assets/31002981/0ffc8721-d586-403b-bbc6-de2855e9c888">
+</div>
+
+
+
+
 
