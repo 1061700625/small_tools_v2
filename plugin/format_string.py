@@ -1,138 +1,97 @@
-# Python和Tkinter：
-# 运行后，弹出窗口。
-# 窗口内包括2个比较大的文本输入框input_text1、input_text2和2个按钮btn_convert、btn_copy，按钮上分别显示的是“转换”、“复制”字样。
-# 用户输入一段文字到文本输入框input_text1中，点击“转换”按钮后，自动将文字中的空格都去掉，然后将处理后的结果显示到文本输入框input_text2。
-# 用户通过点击“复制”按钮后，并将结果复制到系统剪切板上。
-# 再在“复制”按钮边上添加一个“格式化”按钮btn_format，用户点击该按钮后，将input_text2中的内容的样式转为半角字符。
-# 再在“转换”按钮边上添加一个“清空”按钮btn_clear，用户点击该按钮后，将input_text1和input_text2中的内容全部清空。
-
-import re
-from tkinter import *
-from tkinter.ttk import *
-from typing import Dict
-import tkinter.messagebox as messagebox
+import tkinter as tk
+from tkinter import ttk
 import pyperclip
 import unicodedata
+import re
+from tkinter import messagebox
 
-class WinGUI(Tk):
-    widget_dic: Dict[str, Widget] = {}
+class StringFormatterApp(tk.Tk):
     def __init__(self):
         super().__init__()
-        self.__win()
-        self.widget_dic["tk_input_text1"] = self.__tk_input_text1(self)
-        self.widget_dic["tk_button_convert"] = self.__tk_button_convert(self)
-        self.widget_dic["tk_button_clear"] = self.__tk_button_clear(self)
-        self.widget_dic["tk_input_text2"] = self.__tk_input_text2(self)
-        self.widget_dic["tk_button_copy"] = self.__tk_button_copy(self)
-        self.widget_dic["tk_button_format"] = self.__tk_button_format(self)
+        self.title("文本格式化工具")
+        self.configure(bg="#f0f0f0")
+        # 窗口大小设置
+        self.app_width = 600
+        self.app_height = 400
+        # 获取屏幕尺寸以计算布局参数，使窗口居中
+        screen_width = self.winfo_screenwidth()
+        screen_height = self.winfo_screenheight()
+        x = (screen_width - self.app_width) / 2
+        y = (screen_height - self.app_height) / 2
+        self.geometry(f'{self.app_width}x{self.app_height}+{int(x)}+{int(y)}')  # 设置窗口尺寸及位置
+        # 设置样式
+        style = ttk.Style(self)
+        style.configure("TButton", padding=6)
+        style.configure("TLabel", background="#f0f0f0")
+        style.configure("TFrame", background="#f0f0f0")
 
-    def __win(self):
-        self.title("格式化字符串")
-        # 设置窗口大小、居中
-        width = 500
-        height = 470
-        screenwidth = self.winfo_screenwidth()
-        screenheight = self.winfo_screenheight()
-        geometry = '%dx%d+%d+%d' % (width, height, (screenwidth - width) / 2, (screenheight - height) / 2)
-        self.geometry(geometry)
-        self.resizable(width=False, height=False)
+        frame = ttk.Frame(self)
+        frame.pack(padx=20, pady=20, fill=tk.BOTH, expand=True)
 
-        # 自动隐藏滚动条
-    def scrollbar_autohide(self,bar,widget):
-        self.__scrollbar_hide(bar,widget)
-        widget.bind("<Enter>", lambda e: self.__scrollbar_show(bar,widget))
-        bar.bind("<Enter>", lambda e: self.__scrollbar_show(bar,widget))
-        widget.bind("<Leave>", lambda e: self.__scrollbar_hide(bar,widget))
-        bar.bind("<Leave>", lambda e: self.__scrollbar_hide(bar,widget))
-    
-    def __scrollbar_show(self,bar,widget):
-        bar.lift(widget)
+        # 文本框用于显示原始数据
+        self.input_text = tk.Text(frame, height=8, width=50)
+        self.input_text.pack(pady=(10, 10), fill=tk.BOTH, expand=True)
 
-    def __scrollbar_hide(self,bar,widget):
-        bar.lower(widget)
-        
-    def __tk_input_text1(self,parent):
-        ipt = Text(parent, wrap=WORD)
-        ipt.place(x=20, y=20, width=459, height=138)
-        return ipt
+        # 按钮框架
+        button_frame = ttk.Frame(frame)
+        button_frame.pack(fill=tk.X, expand=False)
 
-    def __tk_button_convert(self,parent):
-        btn = Button(parent, text="去除空格")
-        btn.place(x=100, y=180, width=102, height=40)
-        return btn
+        self.btn_clear = ttk.Button(button_frame, text="清空内容", command=self.clear_texts)
+        self.btn_clear.pack(side=tk.LEFT, padx=10, pady=10)
 
-    def __tk_button_clear(self,parent):
-        btn = Button(parent, text="清空内容")
-        btn.place(x=300, y=180, width=102, height=40)
-        return btn
+        self.btn_remove_spaces = ttk.Button(button_frame, text="去除空格", command=self.remove_spaces)
+        self.btn_remove_spaces.pack(side=tk.LEFT, padx=10)
 
-    def __tk_input_text2(self,parent):
-        ipt = Text(parent, wrap=WORD)
-        ipt.place(x=20, y=240, width=460, height=140)
-        return ipt
+        self.btn_remove_newlines = ttk.Button(button_frame, text="去除换行", command=self.remove_newlines)
+        self.btn_remove_newlines.pack(side=tk.LEFT, padx=10)
 
-    def __tk_button_copy(self,parent):
-        btn = Button(parent, text="复制内容")
-        btn.place(x=100, y=400, width=102, height=40)
-        return btn
+        self.btn_format = ttk.Button(button_frame, text="去格式化", command=self.format_text)
+        self.btn_format.pack(side=tk.LEFT, padx=10)
 
-    def __tk_button_format(self,parent):
-        btn = Button(parent, text="去格式化")
-        btn.place(x=300, y=400, width=102, height=40)
-        return btn
+        self.btn_copy = ttk.Button(button_frame, text="复制内容", command=self.copy_text)
+        self.btn_copy.pack(side=tk.LEFT, padx=10)
 
+        # 文本框用于显示处理后的数据
+        self.output_text = tk.Text(frame, height=8, width=50)
+        self.output_text.pack(pady=(10, 10), fill=tk.BOTH, expand=True)
 
-class Win(WinGUI):
-    def __init__(self):
-        super().__init__()
-        self.__event_bind()
+    def clear_texts(self):
+        self.input_text.delete("1.0", tk.END)
+        self.output_text.delete("1.0", tk.END)
 
-    def convert_text(self,evt):
-        input_text1 = self.widget_dic["tk_input_text1"]
-        input_text2 = self.widget_dic["tk_input_text2"]
-        text = input_text1.get("1.0", "end-1c")  # 获取输入文本框中的内容
-        converted_text = text.replace(" ", "")  # 去掉所有空格
-        input_text2.delete("1.0", "end")  # 清空输出文本框
-        input_text2.insert("1.0", converted_text)  # 在输出文本框中显示处理后的结果
+    def remove_spaces(self):
+        text = self.input_text.get("1.0", tk.END).replace(" ", "")
+        self.output_text.delete("1.0", tk.END)
+        self.output_text.insert("1.0", text)
 
-    def copy_text(self,evt):
-        input_text2 = self.widget_dic["tk_input_text2"]
-        text = input_text2.get("1.0", "end-1c")  # 获取输出文本框中的内容
-        pyperclip.copy(text)  # 将结果复制到系统剪切板
-        messagebox.showinfo("提示", "已复制到剪切板！")  # 弹出提示框
+    def remove_newlines(self):
+        text = self.input_text.get("1.0", tk.END).replace("\n", "")
+        self.output_text.delete("1.0", tk.END)
+        self.output_text.insert("1.0", text)
 
-    def format_text(self,evt):
-        def fullwidth_to_halfwidth(s):
-            """Convert full-width characters to half-width."""
-            return ''.join([chr(ord(c) - 0xFEE0) if 0xFF01 <= ord(c) <= 0xFF5E else c for c in s])
-        def is_chinese_or_punctuation(char):
-            """Check if the character is Chinese or a punctuation mark."""
-            category = unicodedata.category(char)
-            return 'Lo' in category or 'P' in category
-        input_text2 = self.widget_dic["tk_input_text2"]
-        text = input_text2.get("1.0", "end-1c")  # 获取输入框2中的内容
-        text = fullwidth_to_halfwidth(text)
-        # Keep ASCII, Chinese characters and Chinese punctuation
-        text = ''.join([char if ord(char) < 128 or is_chinese_or_punctuation(char) else ' ' for char in text])
-        # Replace multiple spaces with a single space
+    def format_text(self):
+        text = self.input_text.get("1.0", tk.END)
+        text = self.fullwidth_to_halfwidth(text)
+        text = ''.join([char if ord(char) < 128 or self.is_chinese_or_punctuation(char) else ' ' for char in text])
         text = re.sub(r'\s+', ' ', text).strip()
-        input_text2.delete("1.0", "end")  # 清空输入框2
-        input_text2.insert("end", text)  # 在输入框2中显示处理后的内容
+        self.output_text.delete("1.0", tk.END)
+        self.output_text.insert("1.0", text)
 
-    def clear_text(self,evt):
-        input_text1 = self.widget_dic["tk_input_text1"]
-        input_text2 = self.widget_dic["tk_input_text2"]
-        input_text1.delete("1.0", "end")  # 清空输入框1
-        input_text2.delete("1.0", "end")  # 清空输入框2
-    
-    def __event_bind(self):
-        self.widget_dic["tk_button_convert"].bind('<Button-1>',self.convert_text)
-        self.widget_dic["tk_button_clear"].bind('<Button-1>',self.clear_text)
-        self.widget_dic["tk_button_copy"].bind('<Button-1>',self.copy_text)
-        self.widget_dic["tk_button_format"].bind('<Button-1>',self.format_text)
+    def fullwidth_to_halfwidth(self, s):
+        return ''.join([chr(ord(c) - 0xFEE0) if 0xFF01 <= ord(c) <= 0xFF5E else c for c in s])
 
-def process():
-    win = Win()
-    win.mainloop()
+    def is_chinese_or_punctuation(self, char):
+        category = unicodedata.category(char)
+        return 'Lo' in category or 'P' in category
+
+    def copy_text(self):
+        text = self.output_text.get("1.0", tk.END)
+        pyperclip.copy(text)
+        messagebox.showinfo("复制到剪切板", "内容已复制到系统剪切板！")
+
+def main():
+    app = StringFormatterApp()
+    app.mainloop()
+
 if __name__ == "__main__":
-    process()
+    main()
