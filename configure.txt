@@ -1,4 +1,4 @@
-字符格式化, format_string.py
+字符格式化, format_string.exe
 PPT改DPI, ppt_dpi.exe
 桌面时钟, desktop_clock.exe
 会议排名, conference_rank.exe
