@@ -1,4 +1,4 @@
-字符格式化, format_string.exe
+字符格式化, format_string.py
 PPT改DPI, ppt_dpi.exe
 桌面时钟, desktop_clock.exe
 会议排名, conference_rank.exe
@@ -8,3 +8,5 @@ SSH端口转发, ssh_forward.exe
 系统代理连接, simple_proxy.exe
 MathML转Latex, mathml2latex.exe
 图片压缩器, compressor.exe
+开启热点, 开启热点.exe
+apk查壳, apk查壳.exe
