@@ -10,3 +10,4 @@ MathML转Latex, mathml2latex.exe
 图片压缩器, compressor.exe
 开启热点, 开启热点.exe
 apk查壳, apk查壳.exe
+图片检索器, image_search.py
