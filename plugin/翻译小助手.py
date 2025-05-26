@@ -8,6 +8,7 @@ import re
 import threading
 import os
 from infi.systray import SysTrayIcon
+import webbrowser
 # from win10toast import ToastNotifier
 
 double_press_interval = 0.5
@@ -39,7 +40,7 @@ def clean_broken_lines(text):
 
 def translate(text):
     try:
-        return GoogleTranslator(source='auto', target='zh-CN').translate(text)
+        return GoogleTranslator(source='en', target='zh-CN').translate(text)
     except Exception as e:
         return f"翻译失败: {e}"
 
@@ -113,7 +114,11 @@ def on_key_event(event):
 
 def run_systray():
     def on_quit(systray): os._exit(0)
-    systray = SysTrayIcon("./favicon.ico", "翻译助手", (), on_quit=on_quit)
+    def open_help_page(systray): webbrowser.open("https://xfxuezhang.blog.csdn.net/article/details/148242601")
+    menu_options = (
+        ("📘 使用说明", None, open_help_page),
+    )
+    systray = SysTrayIcon("./favicon.ico", "翻译助手", menu_options, on_quit=on_quit)
     systray.start()
 
 def run():
