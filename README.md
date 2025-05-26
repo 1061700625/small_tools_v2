@@ -113,4 +113,13 @@ pyinstaller -F -w .\main.py
   <img width="462" alt="image" style="margin: 0 auto;" src="https://github.com/1061700625/small_tools_v2/assets/31002981/fdaecee3-3d74-4e37-9868-80e0ffdc4af0">
 </div>
 
+- **[翻译小助手](https://xfxuezhang.blog.csdn.net/article/details/148242601)**
+<div align=center> 
+  <img width="462" alt="image" style="margin: 0 auto;" src="https://github.com/user-attachments/assets/d9082dd1-a26f-43f7-a16d-c316b9295ed3">
+</div>
+
+
+
+
+
 
