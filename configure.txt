@@ -11,4 +11,5 @@ apk查壳, apk查壳.exe
 图片旋转器, image_rotator.exe
 图片压缩器, compressor.exe
 图片检索器, image_search.py
-多窗口图片查看器, image_viewer.exe
+多图查看器, image_viewer.exe
+翻译小助手, 翻译小助手.exe
