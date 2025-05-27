@@ -56,7 +56,7 @@ def show_translation_window(original_text):
         pyperclip.copy(translated)
 
     win = tk.Tk()
-    win.title("🔤 剪贴板翻译助手")
+    win.title("🔤 剪贴板翻译助手 (by 小锋学长生活大爆炸xfxuezhang.cn)")
     win.geometry("720x500")
     win.minsize(500, 300)
     x = (win.winfo_screenwidth() - 720) // 2
