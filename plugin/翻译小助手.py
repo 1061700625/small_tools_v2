@@ -1,3 +1,4 @@
+import sys
 import keyboard
 import pyperclip
 import time
@@ -94,8 +95,6 @@ def show_translation_window(original_text):
 
 def on_key_event(event):
     global last_c_time, c_press_count
-    if event.name == 'esc':
-        os._exit(0)
     if keyboard.is_pressed('ctrl') and event.name == 'c' and event.event_type == 'down':
         current_time = time.time()
         if current_time - last_c_time < double_press_interval:
@@ -106,11 +105,21 @@ def on_key_event(event):
         if c_press_count == 2:
             try:
                 content = pyperclip.paste()
+                # 忽略非文本（如图像）或空字符串
+                if not isinstance(content, str) or not content.strip():
+                    print("⚠️ 剪贴板内容为空或不是文本，已忽略。")
+                    return
                 cleaned = clean_broken_lines(content)
                 show_translation_window(cleaned)
             except Exception as e:
                 print("❌ 错误:", e)
             c_press_count = 0
+
+
+def resource_path(relative_path):
+    if hasattr(sys, '_MEIPASS'):
+        return os.path.join(sys._MEIPASS, relative_path)
+    return os.path.abspath(relative_path)
 
 def run_systray():
     def on_quit(systray): os._exit(0)
@@ -118,7 +127,8 @@ def run_systray():
     menu_options = (
         ("📘 使用说明", None, open_help_page),
     )
-    systray = SysTrayIcon("./favicon.ico", "翻译助手", menu_options, on_quit=on_quit)
+    icon_path = resource_path("favicon.png")
+    systray = SysTrayIcon(icon_path, "翻译助手", menu_options, on_quit=on_quit)
     systray.start()
 
 def run():
